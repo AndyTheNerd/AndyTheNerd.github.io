@@ -15,17 +15,15 @@
 </head>
 <body class="flex items-center justify-center min-h-screen">
     <div class="max-w-xl w-full mx-4 bg-white p-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Quote of the Day</h1>
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Halo Quotes</h1>
         <div id="quote-container" class="relative bg-gray-100 p-6 rounded-lg border-l-4 border-gray-400">
-            <p id="quote-text" class="text-lg text-gray-700 italic text-center">
+            <p id="quote-text" class="text-lg text-gray-700 italic text-center mb-2">
                 <!-- Quote will be inserted here by JavaScript -->
-                <svg class="animate-spin h-6 w-6 text-gray-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
+            </p>
+            <p id="quote-source" class="text-sm text-gray-500 text-center">
+                <!-- Source game will be inserted here -->
             </p>
         </div>
-        <p id="error-message" class="mt-4 text-center text-sm text-red-500 hidden"></p>
         <div class="flex justify-center mt-6">
             <button id="next-quote-btn" class="bg-gray-800 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-300">
                 Next Quote
@@ -34,60 +32,60 @@
     </div>
     <script>
         const quoteTextElement = document.getElementById('quote-text');
-        const errorMessageElement = document.getElementById('error-message');
+        const quoteSourceElement = document.getElementById('quote-source');
         const nextQuoteBtn = document.getElementById('next-quote-btn');
-        let quotes = [];
+        
+        // Quotes organized by game, stored in separate arrays.
+        const halo2Quotes = [
+            "For a brick, he flew pretty good!",
+            "To war!",
+            "Sir, permission to leave the station.",
+            "To give the Covenant back their bomb!"
+        ];
 
-        async function fetchQuotes() {
-            // Pool of possible quote files (HTTP-relative to where index.html is served)
-            const filePool = [
-                'halo-quotes/dialogue/halo_lines.txt',
-                'halo-quotes/dialogue/halo5.txt'
-                // add more files here
-            ];
+        const halo3Quotes = [
+            "Wake me when you need me.",
+            "I am a monument to all your sins.",
+            "I know what the ladies like.",
+            "Don't ever, EVER, use that thing again!"
+        ];
+        
+        const haloReachQuotes = [
+            "I'm ready! How 'bout you?",
+            "You just wouldn't get it, would you?",
+            "Remember Reach."
+        ];
 
-            try {
-                // Pick exactly one file at random from the pool
-                const chosenFile = filePool[Math.floor(Math.random() * filePool.length)];
-
-                const response = await fetch(chosenFile);
-                if (!response.ok) throw new Error(`Failed to fetch ${chosenFile}: ${response.status}`);
-
-                const text = await response.text();
-                const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-
-                if (lines.length === 0) {
-                    quoteTextElement.textContent = `No quotes found in ${chosenFile}.`;
-                    nextQuoteBtn.disabled = true;
-                    return;
-                }
-
-                // Choose a random quote from the chosen file
-                const randomIndex = Math.floor(Math.random() * lines.length);
-                quotes = lines; // keep the loaded file in memory for 'Next Quote' button
-                quoteTextElement.textContent = `"${lines[randomIndex]}"`;
-                nextQuoteBtn.disabled = false;
-                errorMessageElement.classList.add('hidden');
-            } catch (error) {
-                console.error('Error fetching quotes:', error);
-                quoteTextElement.textContent = "Could not load quotes.";
-                errorMessageElement.textContent = `Error: ${error.message}`;
-                errorMessageElement.classList.remove('hidden');
-                nextQuoteBtn.disabled = true;
-            }
-        }
+        // An object to map game names to their quote arrays
+        const games = {
+            "Halo 2": halo2Quotes,
+            "Halo 3": halo3Quotes,
+            "Halo Reach": haloReachQuotes
+        };
 
         function displayRandomQuote() {
-            if (quotes.length > 0) {
-                const randomIndex = Math.floor(Math.random() * quotes.length);
-                quoteTextElement.textContent = `"${quotes[randomIndex]}"`;
-            }
+            // Get a list of the game names (e.g., "Halo 2", "Halo 3")
+            const gameNames = Object.keys(games);
+            
+            // Randomly select one of the game names
+            const randomGameName = gameNames[Math.floor(Math.random() * gameNames.length)];
+            
+            // Get the array of quotes for the selected game
+            const quotesArray = games[randomGameName];
+            
+            // Randomly select a quote from that array
+            const randomQuote = quotesArray[Math.floor(Math.random() * quotesArray.length)];
+            
+            // Update the HTML elements
+            quoteTextElement.textContent = `"${randomQuote}"`;
+            quoteSourceElement.textContent = `- ${randomGameName}`;
         }
 
+        // Display a new random quote when the button is clicked
         nextQuoteBtn.addEventListener('click', displayRandomQuote);
         
-        // Initial fetch
-        fetchQuotes();
+        // Display an initial quote when the page loads
+        displayRandomQuote();
     </script>
 </body>
 </html>
