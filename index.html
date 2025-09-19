@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halo Quotes</title>
+    <title>Halo Quotes by Team Respawn</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            /* Background image with overlay for readability */
-            background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpaperaccess.com%2Ffull%2F968018.jpg&f=1&nofb=1&ipt=0001cebad1bc0defc925f90af0d231052b98b8c085314ee6878f2bebdd4da343');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
             position: relative;
+        }
+
+        #background-iframe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: -2; /* Sits behind everything else */
         }
 
         body::before {
@@ -26,7 +30,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
-            z-index: -1;
+            z-index: -1; /* Sits between the content and the background */
         }
 
         /* Ensure content is on top of the overlay */
@@ -34,25 +38,41 @@
             position: relative;
             z-index: 1;
         }
+        
+        /* New style for the transparent modal background */
+        .transparent-modal-bg {
+            background-color: rgba(255, 255, 255, 1); /* Last value reflects opacity */
+        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-    <div class="max-w-xl w-full mx-4 bg-white p-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Halo Quotes</h1>
-        <div id="quote-container" class="relative bg-gray-100 p-6 rounded-lg border-l-4 border-gray-400">
-            <p id="quote-text" class="text-lg text-gray-700 italic text-center mb-2">
-                <!-- Quote will be inserted here by JavaScript -->
-            </p>
-            <p id="quote-source" class="text-sm text-gray-500 text-center">
-                <!-- Source game will be inserted here -->
-            </p>
-        </div>
-        <div class="flex justify-center mt-6">
-            <button id="next-quote-btn" class="bg-gray-800 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-300">
-                Next Quote
-            </button>
+<body class="min-h-screen flex flex-col justify-between">
+    <iframe id="background-iframe" src="https://xephorium.github.io/Halo3LoadingScreen/?nologo"></iframe>
+
+    <div class="flex-grow flex items-center justify-center">
+        <div class="max-w-xl w-full mx-4 p-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 transparent-modal-bg">
+            <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Halo Quotes</h1>
+            <div id="quote-container" class="relative p-6 rounded-lg border-l-4 border-gray-400" style="background-color: rgba(243, 244, 246, 0.85);">
+                <p id="quote-text" class="text-lg text-gray-700 italic text-center mb-2">
+                    </p>
+                <p id="quote-source" class="text-sm text-gray-500 text-center">
+                    </p>
+            </div>
+            <div class="flex justify-center mt-6">
+                <button id="next-quote-btn" class="bg-gray-800 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-300">
+                    Next Quote
+                </button>
+            </div>
         </div>
     </div>
+
+    <div class="fixed bottom-4 left-0 w-full text-center text-gray-400 text-sm">
+        Found an incorrect quote? Report it in our <a href="https://www.discord.gg/teamrespawn" target="_blank" class="underline hover:text-white transition-colors duration-200">Discord!</a>
+        <br>
+        Made with <span class="text-red-500">❤</span> by <a href="https://www.youtube.com/@TeamRespawn" target="_blank" class="underline hover:text-white transition-colors duration-200">Team Respawn</a>
+        <br>
+        View the code <a href="https://github.com/AndyTheNerd/AndyTheNerd.github.io" class="underline hover:text-white transition-colors duration-200">here</a>
+    </div>
+
     <script>
         const quoteTextElement = document.getElementById('quote-text');
         const quoteSourceElement = document.getElementById('quote-source');
