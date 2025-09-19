@@ -9,7 +9,30 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #729ef5;
+            /* Background image with overlay for readability */
+            background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpaperaccess.com%2Ffull%2F968018.jpg&f=1&nofb=1&ipt=0001cebad1bc0defc925f90af0d231052b98b8c085314ee6878f2bebdd4da343');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+            z-index: -1;
+        }
+
+        /* Ensure content is on top of the overlay */
+        .min-h-screen {
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
@@ -62,28 +85,29 @@
             "Halo 3": halo3Quotes,
             "Halo Reach": haloReachQuotes
         };
-
+        
         function displayRandomQuote() {
             // Get a list of the game names (e.g., "Halo 2", "Halo 3")
             const gameNames = Object.keys(games);
-            
+
             // Randomly select one of the game names
             const randomGameName = gameNames[Math.floor(Math.random() * gameNames.length)];
-            
+
             // Get the array of quotes for the selected game
             const quotesArray = games[randomGameName];
-            
+
             // Randomly select a quote from that array
             const randomQuote = quotesArray[Math.floor(Math.random() * quotesArray.length)];
             
             // Update the HTML elements
             quoteTextElement.textContent = `"${randomQuote}"`;
+
             quoteSourceElement.textContent = `- ${randomGameName}`;
         }
 
         // Display a new random quote when the button is clicked
         nextQuoteBtn.addEventListener('click', displayRandomQuote);
-        
+
         // Display an initial quote when the page loads
         displayRandomQuote();
     </script>
