@@ -9,7 +9,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background-color: #729ef5;
         }
     </style>
 </head>
@@ -39,20 +39,35 @@
         let quotes = [];
 
         async function fetchQuotes() {
+            // Pool of possible quote files (HTTP-relative to where index.html is served)
+            const filePool = [
+                'halo-quotes/dialogue/halo_lines.txt',
+                'halo-quotes/dialogue/halo5.txt'
+                // add more files here
+            ];
+
             try {
-                const response = await fetch('quotes.txt');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                // Pick exactly one file at random from the pool
+                const chosenFile = filePool[Math.floor(Math.random() * filePool.length)];
+
+                const response = await fetch(chosenFile);
+                if (!response.ok) throw new Error(`Failed to fetch ${chosenFile}: ${response.status}`);
+
                 const text = await response.text();
-                quotes = text.trim().split('\n').filter(line => line.length > 0);
-                if (quotes.length > 0) {
-                    displayRandomQuote();
-                    nextQuoteBtn.disabled = false;
-                } else {
-                    quoteTextElement.textContent = "No quotes found in quotes.txt.";
+                const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+
+                if (lines.length === 0) {
+                    quoteTextElement.textContent = `No quotes found in ${chosenFile}.`;
                     nextQuoteBtn.disabled = true;
+                    return;
                 }
+
+                // Choose a random quote from the chosen file
+                const randomIndex = Math.floor(Math.random() * lines.length);
+                quotes = lines; // keep the loaded file in memory for 'Next Quote' button
+                quoteTextElement.textContent = `"${lines[randomIndex]}"`;
+                nextQuoteBtn.disabled = false;
+                errorMessageElement.classList.add('hidden');
             } catch (error) {
                 console.error('Error fetching quotes:', error);
                 quoteTextElement.textContent = "Could not load quotes.";
