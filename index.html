@@ -43,10 +43,24 @@
         .transparent-modal-bg {
             background-color: rgba(255, 255, 255, 1); /* Last value reflects opacity */
         }
+
+        /* Mobile-specific styles for the background */
+        @media (max-width: 768px) {
+            body {
+                background-image: url('https://wallpapers.com/images/hd/master-chief-phone-32ja876t0j9rii9c.jpg');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+            #background-iframe {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
-    <iframe id="background-iframe" src="https://xephorium.github.io/Halo3LoadingScreen/?nologo"></iframe>
+    <iframe id="background-iframe" src="https://xephorium.github.io/Halo3LoadingScreen/?2k&nologo"></iframe>
 
     <div class="flex-grow flex items-center justify-center">
         <div class="max-w-xl w-full mx-4 p-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 transparent-modal-bg">
